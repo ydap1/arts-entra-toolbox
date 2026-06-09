@@ -18,10 +18,13 @@ jobs:
         include:
           - os: windows-latest
             artifact: dist/*.exe
+            make_release: true
           - os: macos-latest
             artifact: dist/*.dmg
+            make_release: false
           - os: ubuntu-latest
             artifact: dist/*.AppImage
+            make_release: false
 
     runs-on: ${{ matrix.os }}
 
@@ -51,4 +54,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ matrix.artifact }}
-          generate_release_notes: true
+          generate_release_notes: ${{ matrix.make_release }}
