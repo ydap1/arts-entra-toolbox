@@ -87,12 +87,7 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 7px;
-  background: var(--accent);
-  color: #1a1205;
-  font-weight: 700;
-  font-size: 16px;
-  display: grid;
-  place-items: center;
+  flex-shrink: 0;
 }
 .title {
   font-size: 15px;
