@@ -12,3 +12,6 @@ msal_cache/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Local AI instructions — not for the repo
+CLAUDE.md
