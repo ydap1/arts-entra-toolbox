@@ -145,10 +145,14 @@ export function AppProvider({ children }: { children: ReactNode }): JSX.Element 
 
   const disconnect = useCallback(async () => {
     if (tenantId) await api.disconnect(tenantId)
+    if (demo) await api.setDemo(false)
     setConnected(false)
+    setDemo(false)
+    setTenantId(null)
     setTenantName('')
+    setAccount('')
     setStatus({ text: 'Signed out. Select a tenant to reconnect.', tone: 'dim' })
-  }, [tenantId])
+  }, [tenantId, demo])
 
   const startDemo = useCallback(async () => {
     await api.setDemo(true)

@@ -46,8 +46,13 @@ export function getSavedTenants(): Tenant[] {
 
 export function saveTenant(tenantId: string, displayName = ''): void {
   const all = getSavedTenants()
-  if (all.some((t) => t.tenantId === tenantId)) return
-  all.push({ tenantId, displayName })
+  const existing = all.find((t) => t.tenantId === tenantId)
+  if (existing) {
+    // Update the name if the caller supplied one (e.g. re-add with a different label).
+    if (displayName) existing.displayName = displayName
+  } else {
+    all.push({ tenantId, displayName })
+  }
   writeJson(tenantsPath(), all)
 }
 
