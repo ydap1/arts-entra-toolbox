@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/readme_logo.png" alt="Entra Toolbox" width="520">
+</p>
+
 # Entra Toolbox
 
 > Built for my own IT workflow managing school Entra ID tenants. Published for reference — may not suit your use case.

@@ -3,6 +3,12 @@ import { join } from 'node:path'
 import { registerIpc } from './ipc'
 
 function createWindow(): void {
+  // Dev: __dirname = out/main/ → ../../assets/icon.png resolves to the source tree.
+  // Production: icon is copied outside the asar via extraResources → process.resourcesPath.
+  const iconPath = app.isPackaged
+    ? join(process.resourcesPath, 'icon.png')
+    : join(__dirname, '../../assets/icon.png')
+
   const win = new BrowserWindow({
     width: 1280,
     height: 820,
@@ -11,6 +17,7 @@ function createWindow(): void {
     backgroundColor: '#0F1115',
     autoHideMenuBar: true,
     title: "Art's Entra Toolbox",
+    icon: iconPath,
     // Don't show until the first frame is painted — avoids a blank/white
     // flash while JS is loading, especially noticeable in the portable build.
     show: false,

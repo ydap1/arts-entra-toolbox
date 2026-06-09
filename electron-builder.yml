@@ -1,6 +1,7 @@
 appId: com.electron.entra-toolbox
 productName: "Entra Toolbox"
 copyright: Copyright © 2026
+icon: assets/icon.png
 
 directories:
   output: dist
@@ -9,6 +10,12 @@ directories:
 files:
   - out/**/*
   - package.json
+
+# Copy the icon outside the asar so the main process can load it at runtime
+# (BrowserWindow taskbar icon, especially on Linux).
+extraResources:
+  - from: assets/icon.png
+    to: icon.png
 
 asar: true
 
