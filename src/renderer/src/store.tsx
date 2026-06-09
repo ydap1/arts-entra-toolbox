@@ -185,8 +185,8 @@ export function AppProvider({ children }: { children: ReactNode }): JSX.Element 
       if (list.length) {
         const last = await api.getSetting<string>('LastTenantId')
         const pick = list.find((t) => t.tenantId === last) ?? list[0]
-        setTenantId(pick.tenantId)
-        setTenantName(pick.displayName)
+        setTenantName(pick.displayName) // show saved name while connecting
+        selectTenant(pick.tenantId) // silently re-auth from MSAL cache
       } else {
         setStatus({ text: 'No tenants saved. Click + to add one.', tone: 'dim' })
       }
