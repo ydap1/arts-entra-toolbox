@@ -24,9 +24,29 @@
   box-sizing: border-box;
 }
 
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* ── Scrollbars ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
 body {
   margin: 0;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Lexend', system-ui, sans-serif;
   font-size: 13px;
   background: var(--bg);
   color: var(--text);

@@ -5,6 +5,15 @@ export type Release = { version: string; date: string; changes: string[] }
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.1.1',
+    date: '2026-06-09',
+    changes: [
+      'Switched UI font to Lexend',
+      'Fixed font not applying to buttons, inputs, and dropdowns',
+      'Scrollbars now match the dark theme'
+    ]
+  },
+  {
     version: '0.1.0',
     date: '2026-06-09',
     changes: [
