@@ -14,13 +14,15 @@ files:
 asar: true
 
 win:
+  # Unsigned build — avoids winCodeSign download/extract issues on locked-down machines
+  # If you add an icon later, put it in build/icon.ico and uncomment:
+  # icon: build/icon.ico
+  signAndEditExecutable: false
   target:
     - target: nsis
       arch: x64
     - target: portable
       arch: x64
-  # If you add an icon later, put it in build/icon.ico and uncomment:
-  # icon: build/icon.ico
 
 nsis:
   oneClick: false
