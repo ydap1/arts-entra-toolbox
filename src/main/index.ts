@@ -11,6 +11,9 @@ function createWindow(): void {
     backgroundColor: '#0F1115',
     autoHideMenuBar: true,
     title: "Art's Entra Toolbox",
+    // Don't show until the first frame is painted — avoids a blank/white
+    // flash while JS is loading, especially noticeable in the portable build.
+    show: false,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,
@@ -18,6 +21,8 @@ function createWindow(): void {
       sandbox: false
     }
   })
+
+  win.once('ready-to-show', () => win.show())
 
   const devUrl = process.env['ELECTRON_RENDERER_URL']
   if (devUrl) {

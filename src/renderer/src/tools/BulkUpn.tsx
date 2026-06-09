@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '../api'
 import { useApp } from '../store'
+import { VirtualList } from '../components/VirtualList'
+
+const ROW_H = 52
 
 type BucUser = {
   id: string
@@ -212,18 +215,22 @@ export default function BulkUpn(): JSX.Element {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="tool-list">
-          {shown.map((u) => (
+        <VirtualList
+          items={shown}
+          rowHeight={ROW_H}
+          className="tool-list"
+          renderItem={(u) => (
             <div
               key={u.id}
               className={`row${picked.has(u.id) ? ' sel' : ''}`}
+              style={{ height: ROW_H, boxSizing: 'border-box' }}
               onClick={() => togglePick(u.id)}
             >
               <div>{u.displayName}</div>
               <div className="upn">{u.userPrincipalName}</div>
             </div>
-          ))}
-        </div>
+          )}
+        />
         <div style={{ padding: 8, borderTop: '1px solid var(--border)' }}>
           <button
             className="btn-indigo"

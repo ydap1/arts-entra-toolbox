@@ -22,7 +22,7 @@ export function registerLastDeviceTool(): void {
       }))
     const items = await graphPaged(
       a.tenantId,
-      '/v1.0/users?$select=id,displayName,userPrincipalName&$top=999'
+      '/v1.0/users?$select=id,displayName,userPrincipalName&$filter=accountEnabled eq true&$top=999'
     )
     return items.map((u) => ({
       id: u.id,

@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { AppProvider, useApp } from './store'
 import Header from './components/Header'
 import TenantBar from './components/TenantBar'
@@ -16,7 +17,10 @@ function Shell(): JSX.Element {
       <TenantBar />
       <div className="body">
         <NavSidebar />
-        <div className="content">{Tool ? <Tool /> : null}</div>
+        <div className="content">
+          {/* Suspense boundary for React.lazy tool chunks */}
+          <Suspense fallback={null}>{Tool ? <Tool /> : null}</Suspense>
+        </div>
       </div>
       {logOpen && <LogPane />}
       <StatusBar />

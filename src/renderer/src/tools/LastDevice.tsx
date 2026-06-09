@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '../api'
 import { useApp } from '../store'
+import { VirtualList } from '../components/VirtualList'
 
 type LdUser = { id: string; displayName: string; userPrincipalName: string }
 type LdLogon = { userId: string; lastLogOnDateTime: string | null }
@@ -11,6 +12,9 @@ type LdDevice = {
   usersLoggedOn: LdLogon[]
 }
 type Tab = 'user' | 'device' | 'stale'
+
+// Row height for the virtual list: padding (8+8=16px) + two text lines (~34px) = ~50px.
+const ROW_H = 52
 
 const STALE_DAYS = [7, 30, 60, 90]
 
@@ -28,6 +32,7 @@ export default function LastDevice(): JSX.Element {
   const { tenantId, connected, setStatus } = useApp()
   const [users, setUsers] = useState<LdUser[]>([])
   const [devices, setDevices] = useState<LdDevice[]>([])
+  const userCountRef = useRef(0) // read inside the devices callback without a stale closure
   const [tab, setTab] = useState<Tab>('user')
 
   // By User
@@ -43,21 +48,35 @@ export default function LastDevice(): JSX.Element {
     if (!connected || !tenantId) {
       setUsers([])
       setDevices([])
+      userCountRef.current = 0
       setPickedUser(null)
       setPickedDev(null)
       return
     }
+
     setStatus({ text: 'Loading users and devices…', tone: 'dim' })
-    Promise.all([
-      api.invoke<LdUser[]>('ld:users', { tenantId }),
-      api.invoke<LdDevice[]>('ld:devices', { tenantId })
-    ])
-      .then(([us, ds]) => {
+
+    // Load independently so each list appears as soon as its data arrives
+    // instead of waiting for the slower of the two.
+    api
+      .invoke<LdUser[]>('ld:users', { tenantId })
+      .then((us) => {
+        userCountRef.current = us.length
         setUsers([...us].sort((a, b) => a.displayName.localeCompare(b.displayName)))
-        setDevices([...ds].sort((a, b) => a.deviceName.localeCompare(b.deviceName)))
-        setStatus({ text: `Loaded ${us.length} user(s) and ${ds.length} device(s).`, tone: 'ok' })
+        setStatus({ text: `${us.length} user(s) loaded — loading devices…`, tone: 'dim' })
       })
-      .catch((e) => setStatus({ text: `Load error: ${String(e)}`, tone: 'bad' }))
+      .catch((e) => setStatus({ text: `User load error: ${String(e)}`, tone: 'bad' }))
+
+    api
+      .invoke<LdDevice[]>('ld:devices', { tenantId })
+      .then((ds) => {
+        setDevices([...ds].sort((a, b) => a.deviceName.localeCompare(b.deviceName)))
+        setStatus({
+          text: `Loaded ${userCountRef.current || '?'} user(s) and ${ds.length} device(s).`,
+          tone: 'ok'
+        })
+      })
+      .catch((e) => setStatus({ text: `Device load error: ${String(e)}`, tone: 'bad' }))
   }, [tenantId, connected])
 
   const userById = useMemo(() => new Map(users.map((u) => [u.id, u])), [users])
@@ -151,18 +170,23 @@ export default function LastDevice(): JSX.Element {
                 onChange={(e) => setUserSearch(e.target.value)}
               />
             </div>
-            <div className="tool-list">
-              {shownUsers.map((u) => (
+            {/* VirtualList: only renders ~15 rows at a time regardless of list size */}
+            <VirtualList
+              items={shownUsers}
+              rowHeight={ROW_H}
+              className="tool-list"
+              renderItem={(u) => (
                 <div
                   key={u.id}
                   className={`row${pickedUser === u.id ? ' sel' : ''}`}
+                  style={{ height: ROW_H, boxSizing: 'border-box' }}
                   onClick={() => setPickedUser(u.id)}
                 >
                   <div>{u.displayName}</div>
                   <div className="upn">{u.userPrincipalName}</div>
                 </div>
-              ))}
-            </div>
+              )}
+            />
           </div>
           <div style={{ overflowY: 'auto' }}>
             <div className="tool-side-head">
@@ -207,18 +231,23 @@ export default function LastDevice(): JSX.Element {
                 onChange={(e) => setDevSearch(e.target.value)}
               />
             </div>
-            <div className="tool-list">
-              {shownDevices.map((d) => (
+            {/* VirtualList: only renders visible rows */}
+            <VirtualList
+              items={shownDevices}
+              rowHeight={ROW_H}
+              className="tool-list"
+              renderItem={(d) => (
                 <div
                   key={d.id}
                   className={`row${pickedDev === d.id ? ' sel' : ''}`}
+                  style={{ height: ROW_H, boxSizing: 'border-box' }}
                   onClick={() => setPickedDev(d.id)}
                 >
                   <div>{d.deviceName}</div>
                   <div className="upn">Last check-in: {fmt(d.lastSyncDateTime)}</div>
                 </div>
-              ))}
-            </div>
+              )}
+            />
           </div>
           <div style={{ overflowY: 'auto' }}>
             <div className="tool-side-head">

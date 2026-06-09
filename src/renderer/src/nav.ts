@@ -1,13 +1,12 @@
-import type { ComponentType } from 'react'
-import YearGroup from './tools/YearGroup'
-import UserPasswordReset from './tools/UserPasswordReset'
-import BulkUpn from './tools/BulkUpn'
-import ImmutableId from './tools/ImmutableId'
-import LastDevice from './tools/LastDevice'
-import SignInLogs from './tools/SignInLogs'
-import GroupCopy from './tools/GroupCopy'
-import Teams from './tools/Teams'
-import UpdateHistory from './tools/UpdateHistory'
+import { lazy, type ComponentType } from 'react'
+
+// Wrap React.lazy to avoid the TS type mismatch between LazyExoticComponent
+// and ComponentType — the cast is safe because lazy components are callable
+// as JSX elements in exactly the same way.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function lz(loader: () => Promise<{ default: ComponentType<any> }>): ComponentType {
+  return lazy(loader) as unknown as ComponentType
+}
 
 export type NavEntry =
   | { type: 'cat'; label: string }
@@ -20,28 +19,28 @@ export const NAV: NavEntry[] = [
     name: 'YearGroup',
     title: 'Year Group Passwords',
     desc: 'Reset passwords for an entire year group',
-    component: YearGroup
+    component: lz(() => import('./tools/YearGroup'))
   },
   {
     type: 'tool',
     name: 'UserReset',
     title: 'User Password Reset',
     desc: 'Reset a single account password',
-    component: UserPasswordReset
+    component: lz(() => import('./tools/UserPasswordReset'))
   },
   {
     type: 'tool',
     name: 'BulkUpn',
     title: 'Bulk UPN Change',
     desc: 'Move users to a different verified domain',
-    component: BulkUpn
+    component: lz(() => import('./tools/BulkUpn'))
   },
   {
     type: 'tool',
     name: 'ImmutableId',
     title: 'Immutable ID',
     desc: 'Assign immutable ID to user',
-    component: ImmutableId
+    component: lz(() => import('./tools/ImmutableId'))
   },
   { type: 'cat', label: 'DEVICES' },
   {
@@ -49,7 +48,7 @@ export const NAV: NavEntry[] = [
     name: 'LastDevice',
     title: 'Last Device',
     desc: 'Login history and stale device detection',
-    component: LastDevice
+    component: lz(() => import('./tools/LastDevice'))
   },
   { type: 'cat', label: 'AUDIT' },
   {
@@ -57,7 +56,7 @@ export const NAV: NavEntry[] = [
     name: 'SignIn',
     title: 'Sign-In Logs',
     desc: 'Browse Entra ID sign-in events',
-    component: SignInLogs
+    component: lz(() => import('./tools/SignInLogs'))
   },
   { type: 'cat', label: 'GROUPS & TEAMS' },
   {
@@ -65,14 +64,14 @@ export const NAV: NavEntry[] = [
     name: 'GroupCopy',
     title: 'Group Copy',
     desc: 'Copy memberships from one user to another',
-    component: GroupCopy
+    component: lz(() => import('./tools/GroupCopy'))
   },
   {
     type: 'tool',
     name: 'Teams',
     title: 'Teams Provisioning',
     desc: 'Create and populate Microsoft Teams',
-    component: Teams
+    component: lz(() => import('./tools/Teams'))
   },
   { type: 'cat', label: 'APP' },
   {
@@ -80,7 +79,7 @@ export const NAV: NavEntry[] = [
     name: 'Changelog',
     title: 'Update History',
     desc: 'Version changelog and release notes',
-    component: UpdateHistory
+    component: lz(() => import('./tools/UpdateHistory'))
   }
 ]
 

@@ -21,12 +21,15 @@ export function registerYearGroupTool(): void {
         userPrincipalName: u.userPrincipalName,
         department: u.department
       }))
+    // accountEnabled filtered server-side to halve the payload on tenants with
+    // many disabled accounts; department still filtered client-side (Graph OData
+    // null-check support varies by tenant type).
     const items = await graphPaged(
       a.tenantId,
-      '/v1.0/users?$select=id,displayName,userPrincipalName,department,accountEnabled&$top=999'
+      '/v1.0/users?$select=id,displayName,userPrincipalName,department&$filter=accountEnabled eq true&$top=999'
     )
     return items
-      .filter((u) => u.accountEnabled === true && u.department)
+      .filter((u) => u.department)
       .map((u) => ({
         id: u.id,
         displayName: u.displayName,
