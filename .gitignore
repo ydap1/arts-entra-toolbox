@@ -1,0 +1,14 @@
+node_modules/
+out/
+dist/
+*.log
+
+# App data / secrets
+config/tenants.json
+config/settings.json
+msal_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
