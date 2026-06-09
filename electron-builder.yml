@@ -1,0 +1,44 @@
+appId: com.electron.arts-entra-toolbox
+productName: "Art's Entra Toolbox"
+copyright: Copyright © 2026
+
+directories:
+  output: dist
+  buildResources: build
+
+files:
+  - out/**/*
+  - package.json
+
+# Don't bundle devDependencies into the app (saves size)
+asar: true
+
+win:
+  target:
+    - target: nsis
+      arch: x64
+    - target: portable
+      arch: x64
+  # If you add an icon later, put it in build/icon.ico and uncomment:
+  # icon: build/icon.ico
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: "Art's Entra Toolbox"
+
+# macOS (future / if needed)
+# mac:
+#   target:
+#     - target: dmg
+#       arch: x64
+#     - target: dmg
+#       arch: arm64
+#   category: public.app-category.utilities
+
+# Linux (future / if needed)
+# linux:
+#   target: AppImage
+#   category: Utility
