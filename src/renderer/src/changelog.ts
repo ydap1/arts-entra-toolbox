@@ -5,6 +5,26 @@ export type Release = { version: string; date: string; changes: string[] }
 
 export const CHANGELOG: Release[] = [
   {
+    version: '0.1.4',
+    date: '2026-06-10',
+    changes: [
+      'Mailbox Delegation redesigned to match Exchange Admin Center: Send As (with EAC link), Send on Behalf, and Read and Manage sections',
+      'Fixed Send on Behalf 404 error — gracefully handles users without Exchange Online mailboxes',
+      'Secure Score: percentage is now the headline figure with a colour-coded threshold guide',
+      'Nav reorganised: Licence Assignment moved into Users, Mailbox & Exchange and Security are now separate groups',
+    ]
+  },
+  {
+    version: '0.1.3',
+    date: '2026-06-10',
+    changes: [
+      'New tool: Licence Assignment — view, assign, and remove M365 licences per user',
+      'New tool: Mailbox Delegation — manage inbox/calendar folder permissions and Send on Behalf of delegates',
+      'New tool: Secure Score — live Microsoft Secure Score with per-category breakdown and control details',
+      'Nav sidebar now has a live search bar to filter tools by name or description',
+    ]
+  },
+  {
     version: '0.1.2',
     date: '2026-06-09',
     changes: [

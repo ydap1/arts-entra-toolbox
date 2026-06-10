@@ -42,6 +42,13 @@ export const NAV: NavEntry[] = [
     desc: 'Assign immutable ID to user',
     component: lz(() => import('./tools/ImmutableId'))
   },
+  {
+    type: 'tool',
+    name: 'Licenses',
+    title: 'Licence Assignment',
+    desc: 'Assign and remove M365 licences',
+    component: lz(() => import('./tools/Licenses'))
+  },
   { type: 'cat', label: 'DEVICES' },
   {
     type: 'tool',
@@ -72,6 +79,22 @@ export const NAV: NavEntry[] = [
     title: 'Teams Provisioning',
     desc: 'Create and populate Microsoft Teams',
     component: lz(() => import('./tools/Teams'))
+  },
+  { type: 'cat', label: 'MAILBOX & EXCHANGE' },
+  {
+    type: 'tool',
+    name: 'MailboxDelegation',
+    title: 'Mailbox Delegation',
+    desc: 'Send As, Send on Behalf, and inbox access',
+    component: lz(() => import('./tools/MailboxDelegation'))
+  },
+  { type: 'cat', label: 'SECURITY' },
+  {
+    type: 'tool',
+    name: 'SecureScore',
+    title: 'Secure Score',
+    desc: 'Microsoft Secure Score and control status',
+    component: lz(() => import('./tools/SecureScore'))
   },
   { type: 'cat', label: 'APP' },
   {

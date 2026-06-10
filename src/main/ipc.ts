@@ -1,7 +1,7 @@
 // IPC registration hub. Shell-level handlers live here; each tool registers its
 // own handlers via registerXxxTool(). Branches on dry/demo mode like the PS tools.
 
-import { ipcMain } from 'electron'
+import { ipcMain, shell } from 'electron'
 import { connectTenant, disconnectTenant } from './auth'
 import { graphGet, graphPaged } from './graph'
 import { mode } from './mode'
@@ -22,8 +22,14 @@ import { registerLastDeviceTool } from './tools/lastDevice'
 import { registerSignInLogsTool } from './tools/signInLogs'
 import { registerGroupCopyTool } from './tools/groupCopy'
 import { registerTeamsTool } from './tools/teams'
+import { registerLicensesTool } from './tools/licenses'
+import { registerMailboxDelegationTool } from './tools/mailboxDelegation'
+import { registerSecureScoreTool } from './tools/secureScore'
 
 export function registerIpc(): void {
+  // ── Shell utilities ────────────────────────────────────────────────────────
+  ipcMain.handle('shell:openExternal', (_e, url: string) => shell.openExternal(url))
+
   // ── Modes ──────────────────────────────────────────────────────────────────
   ipcMain.handle('mode:setDry', (_e, on: boolean) => (mode.dry = !!on))
   ipcMain.handle('mode:setDemo', (_e, on: boolean) => (mode.demo = !!on))
@@ -85,4 +91,7 @@ export function registerIpc(): void {
   registerSignInLogsTool()
   registerGroupCopyTool()
   registerTeamsTool()
+  registerLicensesTool()
+  registerMailboxDelegationTool()
+  registerSecureScoreTool()
 }

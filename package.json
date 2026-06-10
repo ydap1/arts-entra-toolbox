@@ -1,6 +1,6 @@
 {
   "name": "arts-entra-toolbox",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Art's Entra Toolbox — Electron rewrite. Entra ID (Azure AD) management for school IT teams.",
   "main": "./out/main/index.js",
   "author": "Art",
